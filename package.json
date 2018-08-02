@@ -1,0 +1,26 @@
+{
+  "name": "vallo-cli",
+  "version": "0.0.1",
+  "description": "A cli tool for the provallo cms",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@gitlab.com/provallo-cms/vallo-cli.git"
+  },
+  "keywords": [
+    "vallo",
+    "cli",
+    "provallo",
+    "cms",
+    "tool"
+  ],
+  "author": "tyurderi@yahoo.de",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://gitlab.com/provallo-cms/vallo-cli/issues"
+  },
+  "homepage": "https://gitlab.com/provallo-cms/vallo-cli#README"
+}
