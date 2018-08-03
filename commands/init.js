@@ -281,6 +281,7 @@ module.exports = (_path) => {
             description: 'Building backend files',
             handler (resolve, reject, data) {
                 shell.exec('yarn build:backend')
+                resolve()
             }
         },
         
