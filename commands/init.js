@@ -48,7 +48,7 @@ module.exports = (_path) => {
         {
             description: 'Configuration',
             handler (resolve, reject, data) {
-                data.answers = {
+                /*data.answers = {
                     mysql_host: '127.0.0.1',
                     mysql_username: 'root',
                     mysql_password: 'vagrant',
@@ -61,7 +61,7 @@ module.exports = (_path) => {
                     admin_firstname: 'Tommy'
                 }
                 resolve()
-                return
+                return*/
                 
                 
                 ask
@@ -301,10 +301,19 @@ module.exports = (_path) => {
 
                 fs.writeFileSync(configFilename, contents)
 
+                // Setup config.json
+                configFilename = path.join(baseDir, 'config.json')
+                contents = fs.readFileSync(configFilename).toString()
+
+                contents = contents.replace('%host%', 'http://' + config.domain_host)
+                contents = contents.replace('%host%', 'http://' + config.domain_host)
+
+                fs.writeFileSync(configFilename, contents)
+
                 resolve()
             }
         },
-        
+
         {
             description: 'Building backend files',
             handler (resolve, reject, data) {

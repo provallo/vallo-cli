@@ -36,7 +36,7 @@ const step = (items) => {
     
     promise.then((data) => {
         let endTime = Date.now()
-        let time    = (endTime - startTime) / 100
+        let time    = (endTime - startTime) / 1000
         
         console.log('Finished in %ds', time)
         
