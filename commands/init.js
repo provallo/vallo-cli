@@ -211,7 +211,35 @@ module.exports = (_path) => {
         {
             description: 'Getting default plugins',
             handler (resolve, reject, data) {
-                resolve()
+                http.get('api/store/getPlugins')
+                    .then(response => response.data)
+                    .then(response => {
+
+                        response.data.forEach(plugin => {
+                            // Step 1: Download tar archive
+                            let command = format('cd %s && curl "%s" -o plugin.tar.gz', baseDir, plugin.result.uri)
+
+                            shell.exec(command, { silent: true })
+
+                            // Step 2: Extract tar archive
+
+                            command = format('cd %s && tar xzf plugin.tar.gz', baseDir)
+
+                            if (process.platform === 'darwin') {
+                                command = command.replace('tar', 'gtar')
+                            }
+
+                            shell.exec(command)
+
+                            // Step 3: Delete file
+                            command = format('cd %s && rm -f plugin.tar.gz', baseDir)
+
+                            shell.exec(command)
+                        })
+
+                        resolve()
+                    })
+                    .catch(reject)
             }
         },
         
