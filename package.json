@@ -38,6 +38,6 @@
     "targz": "^1.0.1"
   },
   "valloConfig": {
-    "updateServer": "http://provallo.de:88"
+    "updateServer": "http://vue.test"
   }
 }

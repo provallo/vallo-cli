@@ -1,3 +1,7 @@
+console.reset = function () {
+    return process.stdout.write('\033c');
+}
+
 const step = (items) => {
     let data = {}
     let current = 0
@@ -5,7 +9,8 @@ const step = (items) => {
     
     let next = (resolve, reject) => {
         let item = items[current]
-        
+
+        //console.reset()
         console.log('[%d/%d] %s ...', current + 1, items.length, item.description)
         
         item.handler(

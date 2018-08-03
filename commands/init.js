@@ -7,6 +7,7 @@ const targz = require('targz')
 const shell = require('shelljs')
 const ask = require('inquirer')
 const { format } = require('util')
+const os = require('os')
 
 module.exports = (_path) => {
     _path = _path || ''
@@ -17,7 +18,7 @@ module.exports = (_path) => {
     
     let baseDir = path.join(process.cwd(), _path)
     let targetFilename = path.join(baseDir, 'release.tar.gz')
-    
+
     step([
         
         {
@@ -32,6 +33,12 @@ module.exports = (_path) => {
                 } else if (!shell.which('mysql')) {
                     console.log('Missing required program: mysql')
                     reject()
+                } else if (!shell.which('tar')) {
+                    console.log('Missing required program: tar')
+                    reject()
+                } else if (process.platform === 'darwin' && !shell.which('gtar')) {
+                    console.log('Missing required program: btar (Install it via `brew install gnu-tar`')
+                    reject()
                 } else {
                     resolve()
                 }
@@ -42,7 +49,7 @@ module.exports = (_path) => {
             description: 'Configuration',
             handler (resolve, reject, data) {
                 data.answers = {
-                    mysql_host: '192.168.33.10',
+                    mysql_host: '127.0.0.1',
                     mysql_username: 'root',
                     mysql_password: 'vagrant',
                     mysql_database: 'provallo_test',
@@ -154,16 +161,17 @@ module.exports = (_path) => {
         {
             description: 'Extracting release.tar.gz',
             handler (resolve, reject, data) {
-                targz.decompress({
-                    src: targetFilename,
-                    dest: baseDir
-                }, (err) => {
-                    if (err) {
-                        reject(err)
-                    } else {
-                        resolve()
-                    }
-                })
+                let command = format('cd %s && tar xzf %s', baseDir, targetFilename)
+
+                if (process.platform === 'darwin') {
+                    command = command.replace('tar', 'gtar')
+                }
+
+                if (shell.exec(command).code !== 0) {
+                    reject()
+                } else {
+                    resolve()
+                }
             }
         },
         
@@ -214,15 +222,15 @@ module.exports = (_path) => {
                 let config = data.answers
                 let mysql = format('mysql -h%s -u%s -p%s', config.mysql_host, config.mysql_username, config.mysql_password)
                 let command = format('%s -e "SHOW DATABASES"', mysql)
-                let databases = shell.exec(command, { silent: true }).stdout.split('\r\n').slice(1)
-                
+                let databases = shell.exec(command, { silent: true }).stdout.split(os.EOL).slice(1)
+
                 if (databases.indexOf(config.mysql_database) > -1) {
                     resolve()
                     return
                 }
     
                 shell.exec(
-                    format('%s -e "CREATE DATABASE `%s`"', mysql, config.mysql_database),
+                    format('%s -e "CREATE DATABASE \\`%s\\`"', mysql, config.mysql_database),
                     {
                         silent: true
                     }
@@ -245,15 +253,26 @@ module.exports = (_path) => {
                 let mysql = format('mysql -h%s -u%s -p%s', config.mysql_host, config.mysql_username, config.mysql_password)
                 
                 // Set domain
-                let sql = format('UPDATE `domain` SET `host` = \'%s\', secure = %s WHERE id = 1', config.domain_host, config.domain_ssl)
+                let sql = format('UPDATE \\`domain\\` SET \\`host\\` = \'%s\', secure = %s WHERE id = 1', config.domain_host, config.domain_ssl)
                 
                 shell.exec(format('%s -e "USE %s; %s"', mysql, config.mysql_database, sql))
                 
                 // Set user
-                sql = format('UPDATE `user` SET `email` = \'%s\', firstname = \'%s\' WHERE id = 1', config.admin_email, config.admin_firstname)
+                sql = format('UPDATE \\`user\\` SET \\`email\\` = \'%s\', firstname = \'%s\' WHERE id = 1', config.admin_email, config.admin_firstname)
     
                 shell.exec(format('%s -e "USE %s; %s"', mysql, config.mysql_database, sql))
-                
+
+                // Setup mysql configuration
+                let configFilename = path.join(baseDir, 'config.inc.php')
+                let contents = fs.readFileSync(configFilename).toString()
+
+                contents = contents.replace('%database.host%', config.mysql_host)
+                contents = contents.replace('%database.shem%', config.mysql_database)
+                contents = contents.replace('%database.user%', config.mysql_username)
+                contents = contents.replace('%database.pass%', config.mysql_password)
+
+                fs.writeFileSync(configFilename, contents)
+
                 resolve()
             }
         },
