@@ -48,22 +48,6 @@ module.exports = (_path) => {
         {
             description: 'Configuration',
             handler (resolve, reject, data) {
-                /*data.answers = {
-                    mysql_host: '127.0.0.1',
-                    mysql_username: 'root',
-                    mysql_password: 'vagrant',
-                    mysql_database: 'provallo_test',
-                    
-                    domain_host: 'provallo.de',
-                    domain_ssl: true,
-                    
-                    admin_email: 'tyurderi@yahoo.de',
-                    admin_firstname: 'Tommy'
-                }
-                resolve()
-                return*/
-                
-                
                 ask
                     .prompt([
                         /** MySQL configuration **/

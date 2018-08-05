@@ -1,6 +1,6 @@
 {
   "name": "vallo-cli",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A cli tool for the provallo cms",
   "main": "bin/vallo.js",
   "scripts": {
@@ -38,6 +38,6 @@
     "targz": "^1.0.1"
   },
   "valloConfig": {
-    "updateServer": "http://vue.test"
+    "updateServer": "https://yurderi.de"
   }
 }
