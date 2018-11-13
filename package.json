@@ -31,6 +31,7 @@
     "async": "^2.6.1",
     "axios": "^0.18.0",
     "commander": "^2.16.0",
+    "decompress": "^4.2.0",
     "fs-extra": "^7.0.0",
     "ignore": "^5.0.4",
     "inquirer": "^6.0.0",
@@ -42,6 +43,6 @@
     "walker": "^1.0.7"
   },
   "valloConfig": {
-    "updateServer": "https://www.yurderi.de"
+    "updateServer": "https://store.yurderi.de"
   }
 }
