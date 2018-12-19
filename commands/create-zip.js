@@ -12,11 +12,16 @@ const archiver = require('archiver')
 const walker = require('walker')
 const md5 = require('md5')
 
-module.exports = () => {
+module.exports = (dir, { json }) => {
     let pluginDir = process.cwd()
+    
+    if (dir) {
+        pluginDir = path.resolve(dir)
+    }
+    
     let infoFilename = path.join(pluginDir, 'plugin.json')
     let releaseDir = path.join(pluginDir, 'releases')
-
+    
     step([
 
         {
@@ -86,6 +91,10 @@ module.exports = () => {
                                 filename,
                                 relativeFilename
                             })
+                            
+                            if (!json) {
+                                console.log('Adding %s', relativeFilename)
+                            }
                         }
                     })
                     .on('error', (err, entry, stat) => {
@@ -103,12 +112,16 @@ module.exports = () => {
             description: 'Creating archive',
 
             handler (resolve, reject, data) {
-                let hash = md5(JSON.stringify(data.files))
-                let outputFilename = path.join(pluginDir, 'releases', data.plugin.packageID + '_' + data.plugin.version + '_' + hash + '.zip')
+                let outputFilename = path.join(pluginDir, 'releases', data.plugin.packageID + '_' + data.plugin.version + '.zip')
                 let output = fs.createWriteStream(outputFilename)
                 let archive = archiver('zip')
 
                 output.on('close', () => {
+                    if (json) {
+                        console.log(JSON.stringify({ filename: outputFilename }))
+                    } else {
+                        console.log('Filename: %s', outputFilename)
+                    }
                     resolve()
                 })
 
@@ -126,5 +139,5 @@ module.exports = () => {
             }
         }
 
-    ])
+    ], { silent: json })
 }

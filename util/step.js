@@ -2,16 +2,21 @@ console.reset = function () {
     return process.stdout.write('\033c');
 }
 
-const step = (items) => {
+const step = (items, config) => {
     let data = {}
     let current = 0
     let startTime = Date.now()
     
+    config = config || {
+        silent: false
+    }
+    
     let next = (resolve, reject) => {
         let item = items[current]
 
-        //console.reset()
-        console.log('[%d/%d] %s ...', current + 1, items.length, item.description)
+        if (!config.silent) {
+            console.log('[%d/%d] %s ...', current + 1, items.length, item.description)
+        }
         
         item.handler(
             () => {
@@ -35,10 +40,12 @@ const step = (items) => {
     })
     
     promise.then((data) => {
-        let endTime = Date.now()
-        let time    = (endTime - startTime) / 1000
-        
-        console.log('Finished in %ds', time)
+        if (!config.silent) {
+            let endTime = Date.now()
+            let time    = (endTime - startTime) / 1000
+            
+            console.log('Finished in %ds', time)
+        }
         
         return data
     })
