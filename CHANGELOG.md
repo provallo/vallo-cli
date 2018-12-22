@@ -15,3 +15,6 @@
  
 #### 0.0.8
  - Add publish command
+ 
+#### 0.0.9
+ - Enable releases after creation

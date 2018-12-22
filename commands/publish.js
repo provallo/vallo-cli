@@ -52,7 +52,7 @@ module.exports = () => {
         {
             description: 'Creating release',
             handler (resolve, reject, data) {
-                let command = format('savas create-release %s --channel="%s"', data.plugin.version, data.plugin.package.channel)
+                let command = format('savas create-release %s --channel="%s" --enable', data.plugin.version, data.plugin.package.channel)
                 let result = shell.exec(command, { silent: true })
                 
                 if (result.indexOf('the release were created successfully') > -1) {
