@@ -19,6 +19,14 @@ module.exports = (_path) => {
     
     let baseDir = path.join(process.cwd(), _path)
     let targetFilename = path.join(baseDir, 'pv_core.zip')
+    let pluginFilename = path.join(baseDir, 'plugin.json')
+    let currentVersion = '0.0.0'
+    
+    if (fs.existsSync(pluginFilename)) {
+        let plugin = require(pluginFilename)
+        
+        currentVersion = plugin.version
+    }
 
     step([
         
@@ -44,7 +52,7 @@ module.exports = (_path) => {
                     id: 'pv_core',
                     channel: 'stable',
                     platform: 'provallo-core',
-                    version: '0.0.0'
+                    version: currentVersion
                 }
 
                 http.get('api/v1/updates', { params })
@@ -52,8 +60,10 @@ module.exports = (_path) => {
                     .then(response => {
                         if (response.isNewer === true) {
                             data.result = response
+                            console.log('Using version %s', data.result.version)
                             resolve()
                         } else {
+                            console.log('ProVallo is up-to-date')
                             reject(response)
                         }
                     })

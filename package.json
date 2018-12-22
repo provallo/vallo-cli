@@ -1,6 +1,6 @@
 {
   "name": "vallo-cli",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "A cli tool for the provallo cms",
   "main": "bin/vallo.js",
   "scripts": {
@@ -40,6 +40,7 @@
     "path": "^0.12.7",
     "shelljs": "^0.8.2",
     "targz": "^1.0.1",
+    "update-notifier": "^2.5.0",
     "walker": "^1.0.7"
   },
   "valloConfig": {

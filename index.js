@@ -1,12 +1,16 @@
 const program = require('commander')
 const _ = require('lodash')
+const pkg = require('./package')
+const updateNotifier = require('update-notifier');
+
+updateNotifier({pkg}).notify();
 
 program
-    .version('0.0.2')
+    .version(pkg.version)
 
 program
     .command('init [path]')
-    .description('Installs the latest version of the provallo cms')
+    .description('Installs the latest version of ProVallo (can also be used for updates)')
     .action(require('./commands/init'))
 
 program
