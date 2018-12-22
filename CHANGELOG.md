@@ -9,3 +9,6 @@
  - Show correct version on -V
  - Update init command description
  - Do not update ProVallo if latest version is installed
+ 
+#### 0.0.7
+ - Add update command

@@ -16,9 +16,14 @@ module.exports = (_path) => {
     let baseDir = path.join(process.cwd(), _path)
     let targetFilename = path.join(baseDir, 'pv_core.zip')
     let pluginFilename = path.join(baseDir, 'plugin.json')
+    let currentVersion = '0.0.0'
     
     if (fs.existsSync(pluginFilename)) {
-        console.log('Please use `vallo update` to update an existing installation of ProVallo.')
+        let plugin = require(pluginFilename)
+        
+        currentVersion = plugin.version
+    } else {
+        console.log('ProVallo is not installed yet. Please use `vallo init` to install the latest version.')
         return
     }
     
@@ -46,7 +51,7 @@ module.exports = (_path) => {
                     id: 'pv_core',
                     channel: 'stable',
                     platform: 'provallo-core',
-                    version: '0.0.0'
+                    version: currentVersion
                 }
                 
                 http.get('api/v1/updates', {params}).then(response => response.data).then(response => {
@@ -109,7 +114,7 @@ module.exports = (_path) => {
         {
             description: 'Getting php dependencies',
             handler (resolve, reject, data) {
-                shell.exec('composer install', {silent: false})
+                shell.exec('composer update', {silent: false})
                 resolve()
             }
         },

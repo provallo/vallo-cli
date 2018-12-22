@@ -10,8 +10,13 @@ program
 
 program
     .command('init [path]')
-    .description('Installs the latest version of ProVallo (can also be used for updates)')
+    .description('Installs the latest version of ProVallo')
     .action(require('./commands/init'))
+
+program
+.command('update [path]')
+.description('Updates ProVallo to the latest version')
+.action(require('./commands/update'))
 
 program
     .command('create-zip [path]')
