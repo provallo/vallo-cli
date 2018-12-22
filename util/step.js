@@ -1,5 +1,5 @@
 console.reset = function () {
-    return process.stdout.write('\033c');
+    return process.stdout.write('\033c')
 }
 
 const step = (items, config) => {
@@ -12,8 +12,8 @@ const step = (items, config) => {
     }
     
     let next = (resolve, reject) => {
-        let item = items[current]
-
+        let item = items[ current ]
+        
         if (!config.silent) {
             console.log('[%d/%d] %s ...', current + 1, items.length, item.description)
         }
@@ -35,45 +35,16 @@ const step = (items, config) => {
         )
     }
     
-    let promise = new Promise((resolve, reject) => {
-        next(resolve, reject)
-    })
-    
-    promise.then((data) => {
+    return new Promise((resolve, reject) => next(resolve, reject)).then((data) => {
         if (!config.silent) {
             let endTime = Date.now()
-            let time    = (endTime - startTime) / 1000
+            let time = (endTime - startTime) / 1000
             
             console.log('Finished in %ds', time)
         }
         
         return data
-    })
-    
-    return promise
+    }).catch(error => console.log(error))
 }
-
-/*step([
-    
-    {
-        description: 'Creating files',
-        
-        handler(resolve, reject, data) {
-            data.hello = 1
-            resolve()
-        }
-    },
-    {
-        description: 'Cleaning up',
-        handler(resolve, reject, data) {
-            data.world = 1
-            resolve()
-        }
-    }
-    
-]).then(data => {
-    console.log(data)
-})*/
-
 
 module.exports = step

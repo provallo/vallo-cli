@@ -12,3 +12,6 @@
  
 #### 0.0.7
  - Add update command
+ 
+#### 0.0.8
+ - Add publish command

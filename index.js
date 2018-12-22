@@ -1,3 +1,7 @@
+process.on('unhandledRejection', error => {
+    throw error
+})
+
 const program = require('commander')
 const _ = require('lodash')
 const pkg = require('./package')
@@ -14,9 +18,14 @@ program
     .action(require('./commands/init'))
 
 program
-.command('update [path]')
-.description('Updates ProVallo to the latest version')
-.action(require('./commands/update'))
+    .command('update [path]')
+    .description('Updates ProVallo to the latest version')
+    .action(require('./commands/update'))
+
+program
+    .command('publish')
+    .description('Publishes the current state to savas')
+    .action(require('./commands/publish'))
 
 program
     .command('create-zip [path]')

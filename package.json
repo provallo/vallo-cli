@@ -1,6 +1,6 @@
 {
   "name": "vallo-cli",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "A cli tool for the provallo cms",
   "main": "bin/vallo.js",
   "scripts": {
@@ -32,6 +32,7 @@
     "axios": "^0.18.0",
     "commander": "^2.16.0",
     "decompress": "^4.2.0",
+    "format": "^0.2.2",
     "fs-extra": "^7.0.0",
     "ignore": "^5.0.4",
     "inquirer": "^6.0.0",
