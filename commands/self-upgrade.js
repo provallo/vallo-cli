@@ -6,14 +6,12 @@ const step = require('../util/step')
 const shell = require('shelljs')
 const decompress = require('decompress')
 
-module.exports = (_path) => {
-    _path = _path || ''
-    
+module.exports = () => {
     let http = axios.create({
         baseURL: pkg.valloConfig.updateServer
     })
     
-    let baseDir = path.join(process.cwd(), _path)
+    let baseDir = process.cwd()
     let targetFilename = path.join(baseDir, 'pv_core.zip')
     let pluginFilename = path.join(baseDir, 'plugin.json')
     let currentVersion = '0.0.0'
@@ -60,8 +58,7 @@ module.exports = (_path) => {
                         console.log('Using version %s', data.result.version)
                         resolve()
                     } else {
-                        console.log('ProVallo is up-to-date')
-                        reject(response)
+                        console.log('Already is up-to-date.')
                     }
                 }).catch((error) => {
                     console.log('Oops! Something went wrong...')

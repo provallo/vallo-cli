@@ -18,9 +18,9 @@ program
     .action(require('./commands/init'))
 
 program
-    .command('update [path]')
-    .description('Updates ProVallo to the latest version')
-    .action(require('./commands/update'))
+    .command('self-upgrade')
+    .description('Updates ProVallo Core to the latest version')
+    .action(require('./commands/self-upgrade'))
 
 program
     .command('publish')
