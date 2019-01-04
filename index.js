@@ -13,8 +13,8 @@ program
     .version(pkg.version)
 
 program
-    .command('init [path]')
-    .description('Installs the latest version of ProVallo')
+    .command('init')
+    .description('Installs the latest version of ProVallo in the current directory')
     .action(require('./commands/init'))
 
 program
