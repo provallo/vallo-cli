@@ -85,11 +85,40 @@ module.exports = () => {
         },
         
         {
+            description: 'Securing files that should not be overwritten',
+            handler (resolve, reject, data) {
+                data.securedFiles = [
+                    {
+                        originalFilename: path.join(baseDir, 'config.php'),
+                        tempFilename: path.join(baseDir, 'config.php.bak')
+                    }
+                ]
+                
+                data.securedFiles.forEach(item => {
+                    fs.renameSync(item.originalFilename, item.tempFilename)
+                })
+                
+                resolve()
+            }
+        },
+        
+        {
             description: 'Extracting pv_core.zip',
             handler (resolve, reject, data) {
                 decompress(targetFilename, baseDir).then(() => {
                     resolve()
                 }).catch(reject)
+            }
+        },
+        
+        {
+            description: 'Restoring secured files',
+            handler (resolve, reject, data) {
+                data.securedFiles.forEach(item => {
+                    fs.renameSync(item.tempFilename, item.originalFilename)
+                })
+    
+                resolve()
             }
         },
         

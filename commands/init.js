@@ -18,7 +18,7 @@ module.exports = (_path) => {
     let pluginFilename = path.join(baseDir, 'plugin.json')
     
     if (fs.existsSync(pluginFilename)) {
-        console.log('Please use `vallo update` to update an existing installation of ProVallo.')
+        console.log('Please use `vallo self-upgrade` to update an existing installation of ProVallo.')
         return
     }
     
