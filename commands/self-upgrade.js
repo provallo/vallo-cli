@@ -58,7 +58,7 @@ module.exports = () => {
                         console.log('Using version %s', data.result.version)
                         resolve()
                     } else {
-                        console.log('Already is up-to-date.')
+                        console.log('Already up-to-date.')
                     }
                 }).catch((error) => {
                     console.log('Oops! Something went wrong...')
