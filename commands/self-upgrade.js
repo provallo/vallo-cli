@@ -126,7 +126,8 @@ module.exports = () => {
             description: 'Creating required directories',
             handler (resolve, reject, data) {
                 let requiredPaths = [
-                    'cache/twig'
+                    'cache/twig',
+                    'ext'
                 ]
                 
                 requiredPaths.forEach(pathname => {
