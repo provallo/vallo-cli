@@ -1,48 +1,46 @@
-console.reset = function () {
-    return process.stdout.write('\033c')
-}
+'use strict'
 
 const step = (items, config) => {
-    let data = {}
+    const data = {}
     let current = 0
-    let startTime = Date.now()
-    
+    const startTime = Date.now()
+
     config = config || {
         silent: false
     }
-    
-    let next = (resolve, reject) => {
-        let item = items[ current ]
-        
+
+    const next = (resolve, reject) => {
+        const item = items[current]
+
         if (!config.silent) {
             console.log('[%d/%d] %s ...', current + 1, items.length, item.description)
         }
-        
+
         item.handler(
             () => {
                 ++current
-                
+
                 if (current < items.length) {
                     next(resolve, reject)
                 } else {
                     resolve(data)
                 }
             },
-            (err) => {
+            err => {
                 reject(err)
             },
             data
         )
     }
-    
-    return new Promise((resolve, reject) => next(resolve, reject)).then((data) => {
+
+    return new Promise((resolve, reject) => next(resolve, reject)).then(data => {
         if (!config.silent) {
-            let endTime = Date.now()
-            let time = (endTime - startTime) / 1000
-            
+            const endTime = Date.now()
+            const time = (endTime - startTime) / 1000
+
             console.log('Finished in %ds', time)
         }
-        
+
         return data
     }).catch(error => console.log(error))
 }

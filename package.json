@@ -46,5 +46,13 @@
   },
   "valloConfig": {
     "updateServer": "https://store.yurderi.de"
-  }
+  },
+  "xo": {
+    "semicolon": false,
+    "space": 4,
+    "rules": {
+    
+    }
+  },
+  "devDependencies": {}
 }
