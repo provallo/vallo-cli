@@ -49,5 +49,9 @@
   },
   "devDependencies": {
     "xo": "^0.23.0"
+  },
+  "xo": {
+    "semicolon": false,
+    "space": 4
   }
 }
