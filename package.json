@@ -4,7 +4,7 @@
   "description": "A cli tool for the provallo cms",
   "main": "bin/vallo.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "xo"
   },
   "repository": {
     "type": "git",
@@ -47,12 +47,7 @@
   "valloConfig": {
     "updateServer": "https://store.yurderi.de"
   },
-  "xo": {
-    "semicolon": false,
-    "space": 4,
-    "rules": {
-    
-    }
-  },
-  "devDependencies": {}
+  "devDependencies": {
+    "xo": "^0.23.0"
+  }
 }
