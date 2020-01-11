@@ -68,7 +68,7 @@ module.exports = () => {
                 let newVersion = semver.inc(data.plugin.version, incType)
 
                 data.newVersion = newVersion
-                next('updateVersion')
+                next('readReleaseNotes')
             }
         },
 
@@ -91,6 +91,30 @@ module.exports = () => {
             let answer = await inquirer.prompt(questions)
 
             data.newVersion = answer.version
+            next('readReleaseNotes')
+        },
+
+        async readReleaseNotes ({ next, stop }, data) {
+            let { changes } = await inquirer.prompt([
+                {
+                    type: 'editor',
+                    name: 'changes',
+                    message: 'Please enter your changes for this version',
+                    validate(value) {
+                        if (!value.trim().length) {
+                            return 'A value is required.'
+                        }
+                        return true;
+                    }
+                }
+            ])
+
+            if (!data.plugin.hasOwnProperty('changelog')) {
+                data.plugin.changelog = {};
+            }
+
+            data.plugin.changelog[data.newVersion] = changes.trim().split('\n')
+
             next('updateVersion')
         },
 
