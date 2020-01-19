@@ -37,10 +37,28 @@ module.exports = () => {
             next()
         },
 
+        async createChangelog ({ next, stop }, data) {
+            let command = format('git log %s..HEAD --oneline --no-decorate', data.plugin.version)
+            let { stdout } = shell.exec(command, { silent: true })
+
+            data.changelog = stdout.trim()
+                .split('\n')
+                .map(line => line.split(' ').slice(1).join(' '))
+                .join('\n')
+
+            next()
+        },
+
         async selectNewVersion({ next, stop }, data) {
             console.log()
             console.log('Publish a new version of %s (%s)', chalk.keyword('purple')(data.plugin.name), chalk.blue(data.plugin.version))
             console.log()
+
+            if (data.changelog) {
+                console.log('Changelog (from git)')
+                console.log(data.changelog.split('\n').map(line => ' - ' + line).join('\n'))
+                console.log()
+            }
 
             let patchVersion = semver.inc(data.plugin.version, 'patch')
             let minorVersion = semver.inc(data.plugin.version, 'minor')
@@ -97,6 +115,7 @@ module.exports = () => {
         async readReleaseNotes ({ next, stop }, data) {
             let { changes } = await inquirer.prompt([
                 {
+                    default: data.changelog,
                     type: 'editor',
                     name: 'changes',
                     message: 'Please enter your changes for this version',
@@ -173,6 +192,10 @@ module.exports = () => {
         },
 
         async finish({ next, stop }, data) {
+            shell.exec('git commit -vm "Update plugin.json" plugin.json')
+            shell.exec(format('git tag -a %s -m ""', data.plugin.version))
+            shell.exec('git push --follow-tags')
+
             console.log('Finished')
         }
 
