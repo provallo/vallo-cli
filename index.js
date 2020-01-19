@@ -21,6 +21,7 @@ program.command('self-upgrade')
 
 program.command('publish')
     .description('Publishes the current state to savas')
+    .option('--no-changelog', 'Disables auto-generation of the changelog and no tag will be created.')
     .action(require('./commands/publish'))
 
 program.command('create-zip [path]')

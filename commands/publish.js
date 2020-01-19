@@ -7,7 +7,7 @@ const semver = require('semver')
 const shell = require('shelljs')
 const { format } = require('util')
 
-module.exports = () => {
+module.exports = (opts) => {
     const baseDir = process.cwd()
 
     seq({
@@ -38,13 +38,15 @@ module.exports = () => {
         },
 
         async createChangelog ({ next, stop }, data) {
-            let command = format('git log %s..HEAD --oneline --no-decorate', data.plugin.version)
-            let { stdout } = shell.exec(command, { silent: true })
+            if (opts.changelog) {
+                let command = format('git log %s..HEAD --oneline --no-decorate', data.plugin.version)
+                let { stdout } = shell.exec(command, { silent: true })
 
-            data.changelog = stdout.trim()
+                data.changelog = stdout.trim()
                 .split('\n')
                 .map(line => line.split(' ').slice(1).join(' '))
                 .join('\n')
+            }
 
             next()
         },
@@ -115,7 +117,7 @@ module.exports = () => {
         async readReleaseNotes ({ next, stop }, data) {
             let { changes } = await inquirer.prompt([
                 {
-                    default: data.changelog,
+                    default: data.changelog || '',
                     type: 'editor',
                     name: 'changes',
                     message: 'Please enter your changes for this version',
@@ -192,9 +194,11 @@ module.exports = () => {
         },
 
         async finish({ next, stop }, data) {
-            shell.exec('git commit -vm "Update plugin.json" plugin.json')
-            shell.exec(format('git tag -a %s -m ""', data.plugin.version))
-            shell.exec('git push --follow-tags')
+            if (opts.changelog) {
+                shell.exec('git commit -vm "Update plugin.json" plugin.json')
+                shell.exec(format('git tag -a %s -m ""', data.plugin.version))
+                shell.exec('git push --follow-tags')
+            }
 
             console.log('Finished')
         }
