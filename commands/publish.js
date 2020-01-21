@@ -46,6 +46,11 @@ module.exports = (opts) => {
                 .split('\n')
                 .map(line => line.split(' ').slice(1).join(' '))
                 .join('\n')
+
+                if (data.changelog.length <= 0) {
+                    console.log('No changes to publish')
+                    process.exit(0)
+                }
             }
 
             next()
